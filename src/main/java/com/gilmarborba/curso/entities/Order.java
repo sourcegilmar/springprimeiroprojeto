@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.gilmarborba.curso.entities.enuns.OrderStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +30,12 @@ public class Order implements Serializable  {
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'",timezone = "GMT")
 	private Instant moment;
 	
+	// Após a mudança da classe Enum, vamos alterar o tipo da
+	// variável orderStatus, de OrderStatus para Integer
+	// private OrderStatus orderstatus; Internamente no programa
+	// tratará como inteiro mas no banco continuará o literal 
+	private Integer orderStatus;
+	
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "client_id")
@@ -37,13 +44,13 @@ public class Order implements Serializable  {
 	public Order() {
 		
 	}
-	
-	
 
-	public Order(Long id, Instant moment, User client) {
+	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
 		super();
 		this.id = id;
 		this.moment = moment;
+		//this.orderStatus = orderStatus;
+		setOrderStatus(orderStatus);
 		this.client = client;
 	}
 
@@ -74,6 +81,27 @@ public class Order implements Serializable  {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+	
+	public OrderStatus getOrderstatus() {
+		// return orderstatus;
+		return OrderStatus.valueOf(orderStatus);
+		// pega o inteiro externo da classe e converte para
+		// OrderStatus
+	}
+
+	public void setOrderStatus(OrderStatus orderStatus) {
+		this.orderStatus = orderStatus.getCode();
+		
+		// Aqui é o contrário: pega o tipo OrderStatus e 
+		// converte ele para inteiro
+		
+		// O teste é feito porque vai que o programador passa
+		// um nulo aqui!
+		if (orderStatus != null) {
+			this.orderStatus = orderStatus.getCode();
+		}
+		
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -86,9 +114,5 @@ public class Order implements Serializable  {
 		Order other = (Order) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
-	
-	
-	
+		
 }
