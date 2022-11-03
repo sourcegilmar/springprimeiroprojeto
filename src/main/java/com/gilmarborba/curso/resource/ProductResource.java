@@ -13,7 +13,7 @@ import com.gilmarborba.curso.entities.Product;
 import com.gilmarborba.curso.services.ProductService;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/products")
 public class ProductResource {
 
 	@Autowired
