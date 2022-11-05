@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.gilmarborba.curso.entities.enuns.OrderStatus;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -47,6 +49,16 @@ public class Order implements Serializable  {
 	@OneToMany(mappedBy = "id.order")
 	private Set<OrderItem> items = new  HashSet<>();
 		
+	// Relacionamento com payment 
+	// No final da classes vamos incluir os getters e setters
+	// do payment
+	/*
+	 * Por que o Cascade.All?
+	 * Porque estamos fazendo relacionamento 1 para 1 com o mesmo Id. Se o pedido for código 5 o pagamento desse pedido também vai ter código 5. E nesse caso de mapear a relação um para um com o mesmo ID é obrigatório você colocar isso daqui também.
+	 */
+	@OneToOne(mappedBy = "order", cascade = CascadeType.ALL) 
+	private Payment payment;
+	
 	public Order() {
 		
 	}
@@ -83,6 +95,15 @@ public class Order implements Serializable  {
 		this.moment = moment;
 	}
 	
+		
+	public Payment getPayment() {
+		return payment;
+	}
+
+	public void setPayment(Payment payment) {
+		this.payment = payment;
+	}
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -114,7 +135,6 @@ public class Order implements Serializable  {
 	}
 	
 	
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
