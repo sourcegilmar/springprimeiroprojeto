@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +27,10 @@ public class Category implements Serializable {
 	
 	//RELACIONAMENTO
 	
+	// JsonIgnore resolve problema Loop Infinito no Jackson
+	// Porque tem manytomany de categoria para produto e vice versa
 	//@Transient
+	@JsonIgnore
 	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	
