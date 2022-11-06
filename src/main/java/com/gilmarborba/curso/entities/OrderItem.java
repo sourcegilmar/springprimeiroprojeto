@@ -48,6 +48,8 @@ public class OrderItem implements Serializable {
 		id.setOrder(order);
 	}
 	
+	// Para evitar loop infinito (jackson)
+	@JsonIgnore
 	public Product getProduct() {
 		return id.getProduct();
 	}
