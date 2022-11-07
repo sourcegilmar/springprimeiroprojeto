@@ -46,5 +46,26 @@ public class UserService {
 		repository.deleteById(id);
 	}
 	
+	// Entity é uma entidade Monitorada pelo JPA
+	// ATENÇÃO: o MÉTODO getOne mudou de nome agora é
+	// getReferenceBuId (para Spring 30)
+	// O método updateData é criado automaticamente pelo
+	// IDE no "tip" da linha onde está o updateData(entity,obj);
+	public User update(Long Id, User obj) {
+		// user entitty = repository.getOne(Id);
+		User entity = repository.getReferenceById(Id);
+		updateData(entity, obj);
+		return repository.save(entity);
+	}
+
+	// Só estamos deixando atualizar os campos "name", 
+	// "email" e "phone", o "id" e a "senha" não vou deixar
+	// dessa forma, não coloco ele no corpo do método
+	private void updateData(User entity, User obj) {
+		entity.setName(obj.getName());	
+		entity.setEmail(obj.getEmail());
+		entity.setPhone(obj.getPhone());
+	}
+	
 	
 }
