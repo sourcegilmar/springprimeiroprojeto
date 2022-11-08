@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.gilmarborba.curso.entities.User;
 import com.gilmarborba.curso.repositories.UserRepository;
+import com.gilmarborba.curso.services.exceptions.ResourceNotFoundException;
 
 // Necessário para registrar a classe como um 
 // component ou Service e fazer a injeção
@@ -32,7 +33,9 @@ public class UserService {
 	
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id);
-		return obj.get();		
+		// return obj.get(); // dava exceção 500 ...
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
+		
 	}
 	
 	
