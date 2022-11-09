@@ -63,10 +63,18 @@ public class UserService {
 	// O método updateData é criado automaticamente pelo
 	// IDE no "tip" da linha onde está o updateData(entity,obj);
 	public User update(Long Id, User obj) {
+		
+		try {
 		// user entitty = repository.getOne(Id);
 		User entity = repository.getReferenceById(Id);
 		updateData(entity, obj);
 		return repository.save(entity);
+		} catch(RuntimeException e) {
+			e.printStackTrace();			
+			// Só para evitar erro por enquanto
+			throw new ResourceNotFoundException(Id);
+		}
+		
 	}
 
 	// Só estamos deixando atualizar os campos "name",
